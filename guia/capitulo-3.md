@@ -114,4 +114,163 @@ Entender estas diferentes formas de manejar cadenas es crucial para escribir arc
 
 ---
 
+## 2. Números
+
+Los **números** son otro tipo de dato fundamental en YAML, utilizados para representar valores cuantitativos. YAML es bastante flexible y puede inferir automáticamente si un valor es un entero o un flotante. No necesitas usar comillas para la mayoría de los números, a menos que quieras forzarlos a ser tratados como cadenas de texto.
+
+### Enteros
+
+Los **enteros** son números sin componentes fraccionarios. YAML puede reconocer enteros en varias bases:
+
+* **Decimal:** La forma más común, números que usamos a diario.
+    ```yaml
+    edad: 30
+    cantidad_productos: 150
+    puntos: -50
+    ```
+
+* **Octal:** Números que comienzan con `0o` (cero seguido de la letra 'o').
+    ```yaml
+    permisos_octal: 0o755 # Representa 493 en decimal
+    ```
+
+* **Hexadecimal:** Números que comienzan con `0x`.
+    ```yaml
+    color_hex: 0xFF # Representa 255 en decimal
+    error_code: 0xA4 # Representa 164 en decimal
+    ```
+
+* **Binario:** Números que comienzan con `0b`.
+    ```yaml
+    banderas_binarias: 0b101101 # Representa 45 en decimal
+    ```
+
+### Flotantes
+
+Los **flotantes** (o números de coma flotante) son números que incluyen una parte fraccionaria, indicada por un punto (`.`).
+
+* **Sintaxis básica:**
+    ```yaml
+    temperatura: 25.5
+    precio_unitario: 19.99
+    gravedad: 9.81
+    ```
+
+* **Valores especiales:** YAML también soporta representaciones para infinito y no-un-número.
+    * **Infinito:** `inf`, `Inf`, `INF`, `+inf`, `+Inf`, `+INF` para infinito positivo. `-inf`, `-Inf`, `-INF` para infinito negativo.
+        ```yaml
+        limite_superior: .inf # Equivalente a infinito positivo
+        limite_inferior: -.inf # Equivalente a infinito negativo
+        ```
+    * **No es un número (NaN):** `.nan`, `.Nan`, `.NAN`. Se usa para representar un valor indefinido o no representable numéricamente (por ejemplo, el resultado de una división por cero).
+        ```yaml
+        resultado_indefinido: .nan
+        ```
+
+### Notación Exponencial
+
+Para números muy grandes o muy pequeños, puedes usar la **notación exponencial** (también conocida como notación científica o notación E), donde un número es seguido por `e` o `E` y un exponente.
+
+* **Sintaxis:** `[número][e|E][+/-][exponente]`
+* **Ejemplo:**
+    ```yaml
+    distancia_luz: 3.0e+8 # 3.0 * 10^8 (300,000,000)
+    carga_electron: -1.602176634e-19 # -1.602176634 * 10^-19
+    ```
+
+**Consideraciones clave para números en YAML:**
+
+* **Comillas:** Si un número contiene caracteres que no son dígitos (excepto el punto decimal o los prefijos de base) o si quieres que un número sea tratado estrictamente como una cadena de texto (ej. un ID que parece número pero tiene ceros iniciales que deben preservarse), debes **encerrarlo entre comillas**.
+    ```yaml
+    id_producto: "007" # Esto será tratado como la cadena "007", no el número 7
+    numero_de_telefono: "555-1234" # Esto es una cadena debido al guion
+    ```
+* **Separadores de miles:** YAML **no soporta** separadores de miles (como comas o puntos, dependiendo de la configuración regional) dentro de los números. Si los usas, el valor se interpretará como una cadena.
+    ```yaml
+    valor_incorrecto: 1,000,000 # Esto será la cadena "1,000,000"
+    valor_correcto: 1000000 # Esto será el número 1000000
+    ```
+
+Comprender cómo YAML maneja los diferentes tipos de números te permitirá representar datos cuantitativos de forma precisa y evitar interpretaciones erróneas de tus configuraciones.
+
+---
+
+## 3. Booleanos
+
+Los **booleanos** son un tipo de dato lógico que puede tener solo uno de dos valores: **verdadero** o **falso**. Se utilizan comúnmente para configurar interruptores (on/off), banderas (flags) o condiciones binarias en archivos de configuración.
+
+YAML es muy flexible y amigable con el usuario en cuanto a la representación de valores booleanos. Reconoce un conjunto de palabras que, sin comillas, son automáticamente interpretadas como `true` o `false`. Esta flexibilidad mejora la legibilidad para diferentes audiencias.
+
+### Valores Verdaderos y Falsos
+
+YAML es "case-insensitive" para la mayoría de las representaciones booleanas, lo que significa que no distingue entre mayúsculas y minúsculas para estas palabras clave.
+
+**Representaciones de `true` (verdadero):**
+
+* `true`
+* `True`
+* `TRUE`
+* `on`
+* `On`
+* `ON`
+* `yes`
+* `Yes`
+* `YES`
+
+**Representaciones de `false` (falso):**
+
+* `false`
+* `False`
+* `FALSE`
+* `off`
+* `Off`
+* `OFF`
+* `no`
+* `No`
+* `NO`
+
+**Ejemplos de uso:**
+
+```yaml
+# Ejemplos de valores verdaderos
+habilitar_notificaciones: true
+activar_cache: ON
+modo_debug: yes
+
+# Ejemplos de valores falsos
+deshabilitar_envio_email: false
+permitir_publico: No
+uso_experimental: off
+
+# Un booleano dentro de una lista
+opciones:
+  - nombre: guardar_log
+    valor: True
+  - nombre: procesar_datos
+    valor: False
+```
+
+**Consideraciones importantes:**
+
+* **Sin comillas:** Para que YAML interprete el valor como un booleano, **no debe estar entre comillas**. Si pones ` "true" ` o ` 'false' `, YAML lo tratará como una cadena de texto, no como un valor booleano. Esto es crucial si tu sistema espera un tipo de dato booleano y no una cadena.
+    ```yaml
+    # Esto es un booleano (correcto)
+    estado_activo: true
+
+    # Esto es una cadena de texto (¡no es un booleano!)
+    cadena_booleana: "true"
+    ```
+* **Contexto:** Aunque YAML es inteligente, siempre considera el contexto. Si una palabra como "No" está claramente en un contexto donde se espera una cadena (por ejemplo, `nombre: Noé`), la mayoría de los analizadores modernos no la confundirán con un booleano `false`. Sin embargo, para evitar cualquier ambigüedad, si una cadena de texto coincide con una palabra booleana y el contexto no es obvio, es una buena práctica encerrarla entre comillas.
+    ```yaml
+    # Aquí "No" es una cadena porque se espera un nombre
+    primer_nombre: No
+
+    # Aquí "no" es un booleano porque el contexto implica una condición
+    permitir_acceso: no
+    ```
+
+El uso adecuado de los booleanos facilita la configuración lógica de tus aplicaciones y sistemas, permitiendo una fácil activación o desactivación de funcionalidades con solo un vistazo al archivo YAML.
+
+---
+
 [:point_up_2: Volver al Índice](README.md) | [:point_left: Capítulo 2](capitulo-2.md) | [:point_right: Capítulo 4](capitulo-4.md)
