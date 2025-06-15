@@ -8,15 +8,15 @@ Esta guía ha sido creada pensando en ti, ya seas un desarrollador, un administr
 
 A lo largo de los siguientes capítulos, exploraremos la sintaxis fundamental, los tipos de datos, las estructuras avanzadas y las mejores prácticas. También veremos cómo se integra YAML con distintos lenguajes de programación y herramientas del día a día. Nuestro objetivo es proporcionarte una referencia clara y práctica que te permita no solo leer, sino también escribir y validar tus propios archivos YAML con confianza.
 
-## [Ir a la Guía Completa](guia/indice.md)
-
 ## Guía rápida
 
 - [Introducción de YAML](introduccion.md)
 - [Tipos de datos en YAML](tiposdedatos.md)
 - [Elementos de GitHub Actions](elementos.md)
 
+---
 
+## [Guía Completa](guia/indice.md)
 
 
 
